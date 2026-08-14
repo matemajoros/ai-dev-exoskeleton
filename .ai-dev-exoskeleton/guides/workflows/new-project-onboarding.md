@@ -240,15 +240,23 @@ Every bug that costs more than one round is worth a line here.
 
 ## Session 5 (Optional): First Real Task as Validation
 
-Pick a small, low-risk task (bug fix or minor feature) and run through the
-full workflow to validate your setup:
+Onboarding is done — from here on it's ordinary development. Pick a small, low-risk
+task and run it through a real workflow rather than a one-off prompt. The point is to
+exercise the setup end to end while the stakes are low, so pick whichever workflow
+matches the work in front of you:
 
-```
-MODE: debug (or implement)
-SCOPE: [small, well-defined area]
-CONTEXT: First task on this project — validating my agentic engineering setup.
-DONE WHEN: Task completed, tests pass, and the setup felt effective.
-```
+| The work is… | Use | Path |
+|---|---|---|
+| A new feature or a change to an existing one | Feature workflow | `.ai-dev-exoskeleton/guides/workflows/feature.md` |
+| A bug, an error, or something behaving wrongly | Debug workflow | `.ai-dev-exoskeleton/guides/workflows/debug.md` |
+| Moving, renaming, or restructuring existing code | Refactor workflow | `.ai-dev-exoskeleton/guides/workflows/refactor.md` |
+
+Keep the first one small: one feature phase, one bug, or one contained refactor. You are
+validating the context you just built, not shipping the roadmap.
+
+If none of the three fits, fall back to a single scoped session using the pre-session
+checklist (`.ai-dev-exoskeleton/guides/checklists/pre-session.md`) — it holds copy-paste
+session openers for plan, implement, and debug.
 
 After this session, do a post-session review (.ai-dev-exoskeleton/guides/checklists/post-session.md):
 - Did AGENTS.md provide enough context?
