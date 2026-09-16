@@ -12,12 +12,10 @@
 4. Be specific — cite file:line, not vague observations
 
 ## Project knowledge
-Before reviewing, read `docs/context/` — start at the index `docs/context/README.md`.
-It holds this project's architecture, patterns, data model, dependencies, and known
-traps; a reviewer leans on PATTERNS and ARCHITECTURE (the rules a change must obey)
-most. Read what the work needs; on a small repo, read all of it. If a change
-contradicts `docs/context/`, flag it — the docs may be stale, or the change may be
-wrong. If `docs/context/` doesn't exist yet, this repo hasn't been onboarded.
+Read `docs/context/` before reviewing — start at its index; on a small repo read all of
+it. A reviewer leans on PATTERNS and ARCHITECTURE — the rules a change must obey. If a
+change contradicts `docs/context/`, flag it: the docs may be stale, or the change may be
+wrong. No `docs/context/` means this repo isn't onboarded.
 
 ## Process
 

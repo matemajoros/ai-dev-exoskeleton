@@ -12,11 +12,9 @@
 6. If you discover something that needs fixing but is out of scope, NOTE it — don't fix it
 
 ## Project knowledge
-Before implementing, read `docs/context/` — start at the index `docs/context/README.md`.
-It holds this project's architecture, patterns, data model, dependencies, and known
-gotchas; an implementer leans on PATTERNS (code style, imports, test patterns) most.
-Read what the work needs; on a small repo, read all of it. If `docs/context/`
-doesn't exist yet, this repo hasn't been onboarded — do that first
+Read `docs/context/` before implementing — start at its index; on a small repo read all
+of it. An implementer leans on PATTERNS (code style, imports, test patterns) most. No
+`docs/context/` means this repo isn't onboarded — do that first
 (`.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md`).
 
 ## Process
@@ -77,7 +75,7 @@ conventions for this project, those win — the project's grain beats a generic 
 
 ### Step 6: Report
 - Update the plan file's corresponding phase's checkboxes if exist
-- Update all the important context files — AGENTS.md and docs/context/ files (ARCHITECTURE.md, PATTERNS.md, etc.) — if your changes affect documented architecture, patterns, data models, API surface, or dependencies
+- Update all the important context files — AGENTS.md and docs/context/ files (ARCHITECTURE.md, PATTERNS.md, etc.) — if your changes affect documented architecture, patterns, data models, API surface, or dependencies. Before adding a claim, find the claim it replaces or contradicts and update that one — adding without checking is the failure mode, and it's the difference between a file that grows with the task count and one that grows with the system.
 - If you discover issues or notes worth preserving, add them to the task folder (e.g., `docs/tasks/[yyyymmdd-task-name]/NOTES.md`)
 ```
 DONE:

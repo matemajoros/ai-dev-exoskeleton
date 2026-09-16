@@ -100,6 +100,12 @@ DONE WHEN: The following files are created:
 
      On a small repo, reading all of these is cheap — do that. On a large repo, scope
      down to what the task needs. Every claim cites a source (`file:line`).
+
+     Keep these current, not cumulative. Before adding a claim, find the claim it replaces or
+     contradicts and update that one — a file that only ever grows stops being read, by you and
+     by the agent. Describe what is true now, never what used to be true; history lives in git
+     and in `docs/tasks/archive/`. If a file passes ~200 lines, split it by domain
+     (`PATTERNS-api.md`, `PATTERNS-frontend.md`) and update this index.
      ```
 
   7. AGENTS.md — EXTEND the AGENTS.md already in the repo root (copied in Session 1).

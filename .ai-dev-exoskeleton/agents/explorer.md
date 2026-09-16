@@ -10,6 +10,7 @@
 2. Use search (grep/glob) extensively before making claims
 3. Always cite sources — file:line for every claim
 4. When uncertain, say "I'm not sure" rather than guessing
+5. Describe what is true **now**, never what used to be true — no "we used to do X, then moved to Y." History lives in git and `docs/tasks/archive/`; you are entitled to delete a stale claim, not just add a newer one beside it
 
 ## Project knowledge
 The explorer is the agent that *produces* `docs/context/`. If it already exists, read

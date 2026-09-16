@@ -10,11 +10,9 @@
 4. Use parallel exploration when analyzing multiple services/directories
 
 ## Project knowledge
-Before planning, read `docs/context/` — start at the index `docs/context/README.md`.
-It holds this project's architecture, patterns, data model, dependencies, and known
-traps; a planner leans on ARCHITECTURE, DATA_MODEL, and DEPENDENCIES most. Read what
-the work needs; on a small repo, read all of it. If `docs/context/` doesn't exist yet,
-this repo hasn't been onboarded — do that first
+Read `docs/context/` before planning — start at its index; on a small repo read all of
+it. A planner leans on ARCHITECTURE, DATA_MODEL and DEPENDENCIES most. No
+`docs/context/` means this repo isn't onboarded — do that first
 (`.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md`).
 
 ## Process
@@ -44,6 +42,10 @@ For each phase, include ALL of the following:
 
 ### Step 4: Write the Plan
 Create a task folder at `docs/tasks/[yyyymmdd-task-name]/` and write the plan there. Group all related artifacts (notes, test plans, API designs) in the same folder.
+
+Write `## Acceptance` as observable behaviour — what a person can see, click, or call —
+never a test command. This is the list the human walks at the final gate
+(`.ai-dev-exoskeleton/guides/workflows/feature.md`).
 
 Output format for `docs/tasks/[yyyymmdd-task-name]/PLAN.md`:
 ```markdown
@@ -77,6 +79,10 @@ Output format for `docs/tasks/[yyyymmdd-task-name]/PLAN.md`:
 **Verify:** [test command]
 **Rollback:** [how to undo]
 **Depends on:** Phase 1
+
+## Acceptance
+- [ ] WHEN a user calls with an expired token → THEN 401, and the session is destroyed
+- [ ] WHEN the config file is missing → THEN a startup error, not a silent default
 
 ## Risks
 - [risk]: [mitigation]

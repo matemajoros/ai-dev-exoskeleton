@@ -5,10 +5,12 @@ LLM-agnostic set of plain-markdown agents, commands, and guides that live in
 `.ai-dev-exoskeleton/`. No runtime, no dependencies — the files are text a
 coding agent reads, and they happen to contain behavioral instructions.
 
-This is disciplined **agentic engineering**: constraint-driven, evidence-based, with a
-human as the decision-maker at the gates that matter. In practice that's two: **building
-the context** at the start, and **manually testing** the result at the end. The steps in
-between can run with the human checking output rather than supervising every move.
+This is disciplined **agentic engineering**: constraint-driven, evidence-based. Two points
+where your presence is mandatory — the work stops without you: **building the context** at
+the start, and **manually testing** the result at the end. Between them, an agent brings you
+three decisions you can hand back in a line: **the plan**, before implementation starts;
+**a root-cause analysis**, before any debugging fix is applied; and **the review findings**
+the fix session left you.
 
 Every constraint here is a convention the agent is asked to follow, not a hard-enforced
 sandbox — the human stays responsible for holding the line.
