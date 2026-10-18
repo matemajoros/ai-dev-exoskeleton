@@ -59,17 +59,13 @@ Calibrate on **units of work and the context window you have**:
 
 - **The unit is a phase**: one scope, one verifiable "done" you can state in a single
   sentence without "and."
-- **How many phases per session depends on the window.** One on a ~200k window; several on
-  a ~1M one. See Law 1.
+- **How many phases per session depends on the window:** one on ~200k, several on ~1M.
 - **Too big** for any window if: you can't describe "done" without a list, or you find
   yourself planning mid-implementation.
 - **Too small** if: it finishes in a couple of exchanges with nothing to verify — fold it
   into the neighbouring piece.
 
-**Then watch context rot as you go.** Quality degrades before the window runs out — around
-60–70% utilisation you'll see the agent lose earlier decisions, re-read files it already
-read, or drift from constraints stated at the top. That's the real signal to stop, not the
-token count. End the session and start fresh from the plan and task folder.
+**Then watch for context rot as you go** — Law 1 lists the symptoms and when ending costs nothing.
 
 ---
 
@@ -87,22 +83,20 @@ This begins the feature workflow at context-building; see
 ```
 I need a plan for [X]. Read @.ai-dev-exoskeleton/agents/planner.md and follow it.
 SCOPE: [directories to analyze]
-Create a task folder at docs/tasks/[yyyymmdd-name]/ and write the plan to PLAN.md.
+Create a task folder at docs/tasks/[yyyymmdd-task-name]/ and write the plan to PLAN.md.
 Do NOT implement anything.
 ```
 
 ### Implementation Session
 ```
-Implement Phase [N] from docs/tasks/[yyyymmdd-name]/PLAN.md. Read @.ai-dev-exoskeleton/agents/implementer.md and follow it.
-Read docs/context/ files if they exist for architecture and pattern context.
+Implement Phase [N] from docs/tasks/[yyyymmdd-task-name]/PLAN.md. Read @.ai-dev-exoskeleton/agents/implementer.md and follow it.
 SCOPE: [files from the plan]
-Write tests first, then implement. Run tests after.
+No behaviour without a test you've seen fail. Run tests after.
 ```
 
 ### Debug Session
 ```
 Debug this error. Read @.ai-dev-exoskeleton/agents/debugger.md and follow it.
-Read docs/context/ files if they exist for architecture and dependency context.
 SCOPE: [directory]
 ERROR: [paste traceback]
 Trace the root cause first. Do NOT change code until I confirm.

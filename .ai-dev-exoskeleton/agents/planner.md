@@ -14,11 +14,12 @@ Read `docs/context/` before planning — start at its index; on a small repo rea
 it. A planner leans on ARCHITECTURE, DATA_MODEL and DEPENDENCIES most. No
 `docs/context/` means this repo isn't onboarded — do that first
 (`.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md`).
+`## Rigor` in `CONTEXT.md` sets the plan's weight: `light` allows a single-phase plan.
+If `CONTEXT.md`'s `## Rigor` is `heavy`, read `.ai-dev-exoskeleton/references/heavy-mode.md`.
 
 ## Process
 
 ### Step 1: Understand Current State
-- Read `docs/context/` files (ARCHITECTURE.md, PATTERNS.md, etc.) if they exist
 - Read relevant source files across all affected services
 - Map the current architecture: what exists, what talks to what
 - Identify all files that would need to change
@@ -35,17 +36,16 @@ For each phase, include ALL of the following:
 - File-by-file change list with brief description (as checkboxes for progress tracking)
 - **Verify:** test command to run after this phase
 - **Rollback:** strategy if this phase fails
-- Size each phase to be independently testable and independently revertible. How many
-  phases fit in one agent session depends on the context window — one phase per session on
-  a ~200k window, several on a ~1M one. Plan in phases regardless; the session boundary is
-  a separate decision (see Law 1).
+- Size each phase to be independently testable and independently revertible. Plan in phases
+  whatever the context window; how many fit in one session is a separate decision (Law 1).
 
 ### Step 4: Write the Plan
 Create a task folder at `docs/tasks/[yyyymmdd-task-name]/` and write the plan there. Group all related artifacts (notes, test plans, API designs) in the same folder.
 
 Write `## Acceptance` as observable behaviour — what a person can see, click, or call —
-never a test command. This is the list the human walks at the final gate
-(`.ai-dev-exoskeleton/guides/workflows/feature.md`).
+never a test command, and concrete enough that each item could be executed as written. The
+human walks this list at the final gate (`.ai-dev-exoskeleton/guides/workflows/feature.md`);
+where the project has an acceptance or e2e runner, the implementer turns each item into a test.
 
 Output format for `docs/tasks/[yyyymmdd-task-name]/PLAN.md`:
 ```markdown
@@ -92,7 +92,7 @@ Output format for `docs/tasks/[yyyymmdd-task-name]/PLAN.md`:
 ```
 
 ## Anti-Patterns to Avoid
-- Do NOT start implementing "just this small part"
+- Do NOT start implementing "just this small part" — the user starts implementation in a separate session
 - Do NOT create skeleton files or stubs
-- Do NOT modify any non-markdown file
-- Do NOT combine planning with implementation — the user will explicitly start implementation in a separate session
+
+If `docs/context/overrides/<this file's name>` exists, read it — where it conflicts with this file, it wins.

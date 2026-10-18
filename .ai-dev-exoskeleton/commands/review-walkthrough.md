@@ -11,3 +11,5 @@ Look at the issues, findings, or items you just produced above in this conversat
 3. **State your preference with reasoning** — Which solution you recommend and why.
 
 Wait for the user to say **NEXT** before moving to the next item. Until then, stay on the current item and discuss it further if the user has questions or feedback.
+
+If `docs/context/overrides/<this file's name>` exists, read it — where it conflicts with this file, it wins.

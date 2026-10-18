@@ -43,3 +43,6 @@
   pre-session checklist — untouched, only referenced by path.
 - The post-session review block, the Checklist Summary, and the Time Estimate table later
   in the same file — untouched.
+
+## Rigor
+light — one guide file, one section, no reviewer would be asked

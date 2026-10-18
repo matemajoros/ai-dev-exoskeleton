@@ -1,7 +1,7 @@
 # Workflow: New Project Onboarding
 
 > How to set up your agentic engineering system when you join a new project.
-> Goal: Go from zero to productive in 20-90 minutes.
+> Goal: Go from zero to productive in 20-90 minutes (legacy stacks take longer).
 
 ## What You Bring (no changes needed)
 
@@ -22,14 +22,14 @@ Your `.ai-dev-exoskeleton/guides/workflows/*.md` and `.ai-dev-exoskeleton/guides
 ```
 From the ai-dev-exoskeleton repository, copy into the root of your project repository:
   1. the .ai-dev-exoskeleton/ folder (the universal system)
-  2. AGENTS.md (describes the system and the one rule — generic, nothing repo-specific)
+  2. AGENTS.md (describes the system and the prompt scaffold — generic, nothing repo-specific)
   3. CLAUDE.md and/or GEMINI.md if you use those harnesses (thin pointers to AGENTS.md)
 
 Do NOT copy docs/ — that is the exoskeleton repo's own project knowledge. Session 2
 writes yours, and extends AGENTS.md with this project's specifics.
 ```
 
-## Session 2: Explore & Generate Project Context (20-30 min)
+## Session 2: Explore & Generate Project Context (5-30 min)
 
 ```
 MODE: explore
@@ -82,7 +82,8 @@ DONE WHEN: The following files are created:
 
   6. docs/context/README.md — the index every agent starts from. One table row per
      context file: what it holds, and when to read it. Every agent is instructed to
-     read this index first, so it MUST exist. Template:
+     read this index first, so it MUST exist. Leave the **Default rigor** line as a
+     placeholder — the human fills it. Template:
 
      ```markdown
      # Project Context — Index
@@ -98,18 +99,20 @@ DONE WHEN: The following files are created:
      | `API_SURFACE.md` | [one line] | API work, integration debugging |
      | `DEPENDENCIES.md` | [one line] | onboarding, debugging, setup |
 
+     **Default rigor:** light | heavy — [why, for this project as a whole]
+
      On a small repo, reading all of these is cheap — do that. On a large repo, scope
      down to what the task needs. Every claim cites a source (`file:line`).
 
      Keep these current, not cumulative. Before adding a claim, find the claim it replaces or
      contradicts and update that one — a file that only ever grows stops being read, by you and
-     by the agent. Describe what is true now, never what used to be true; history lives in git
-     and in `docs/tasks/archive/`. If a file passes ~200 lines, split it by domain
+     by the agent. Describe what is true now, never what used to be true. History lives in git.
+     If a file passes ~200 lines, split it by domain
      (`PATTERNS-api.md`, `PATTERNS-frontend.md`) and update this index.
      ```
 
   7. AGENTS.md — EXTEND the AGENTS.md already in the repo root (copied in Session 1).
-     Keep everything that's there — it describes the system and the one rule, and is
+     Keep everything that's there — it describes the system and the prompt scaffold, and is
      the single source of truth for that. Retitle the top line to `# Project: [Name]`
      and APPEND the project-specific sections below:
 
@@ -170,10 +173,15 @@ Use @.ai-dev-exoskeleton/agents/explorer.md
 (each just says "read @AGENTS.md") so Claude Code and Gemini CLI auto-discover it from a
 single source of truth.
 
-## Session 3: Establish Feedback Loop (10-15 min)
+Then fill the index's **Default rigor** line yourself. It is the answer `build-context`
+offers on every task, so decide it once, for the typical change here (PLAYBOOK,
+`## Light or heavy`).
 
-The agent can only verify its own work if it can run tests. This session ensures
-the test feedback loop works before you start real tasks.
+## Session 3: Establish Feedback Loop (5-30 min)
+
+The agent can only verify its own work if it can run tests, and can only skip a numeric
+checklist if a tool checks the same thing. This session finds both before you start real
+tasks.
 
 ```
 MODE: explore
@@ -192,11 +200,22 @@ DONE WHEN: The following are confirmed and documented in AGENTS.md:
   4. Any blockers — tests that fail, missing dependencies, environment
      issues that need manual setup
 
+  5. Quality gates — lint, complexity, coverage, dependency-rule and mutation
+     tooling: what the project already runs, what would install in under an
+     hour (name it, don't install it), and what is unavailable for this stack.
+     Record the gates that run today in docs/context/DEPENDENCIES.md under
+     ## Quality gates, one line each: [kind] — [command] — [threshold].
+     If none run: none available — [why]. Record the under-an-hour ones as
+     candidates: [tool] — [what it would check], so the list survives today.
+
   If any test suite cannot run without manual intervention, document
   what's needed so we can fix it.
 
 Use @.ai-dev-exoskeleton/agents/explorer.md
 ```
+
+"None available" is a valid outcome, not a blocker: the agents fall back to
+`.ai-dev-exoskeleton/references/code-quality.md` and the method continues in prose mode.
 
 ### If tests don't run cleanly
 Fix environment issues in a follow-up implementation session before proceeding:
@@ -221,28 +240,63 @@ the technique that fits your stack:
 
 Document the chosen approach and commands in AGENTS.md.
 
-## Session 4: Sharpen Conventions & Gotchas (15-20 min)
+### Optional: Dependency rules for heavy projects with several modules
+Skip this on single-module code, or where heavy tasks are rare — there it is ceremony.
+Where it pays, a reviewer reading for layer violations is guessing; a checker isn't, and a
+violation it reports gets resolved rather than commented on.
+
+```
+MODE: implement
+SCOPE: docs/context/ARCHITECTURE.md, docs/context/DEPENDENCIES.md, the checker's
+  path in the project tree
+CONTEXT: Make this project's module dependency direction checkable.
+CONSTRAINT: Do NOT change application code. Write the checker in the project's
+  own language, inside the project's tree — never in .ai-dev-exoskeleton/.
+DONE WHEN:
+  1. ARCHITECTURE.md has a ## Dependency rules section: which module may
+     depend on which
+  2. One command runs the checker and reports violations against those rules
+  3. DEPENDENCIES.md records it under ## Quality gates:
+     dependency rules — [command] — 0 violations
+```
+
+## Session 4: Conventions, Gotchas & Overrides (5-30 min)
 
 Session 2 produced `docs/context/`. This session sharpens `PATTERNS.md` — the file the
 agents lean on most during real work — because conventions and known gotchas are what keep
-the agent inside the project's grain.
+the agent inside the project's grain. It also proposes overrides where a method rule can't
+hold here.
 
 ```
 MODE: explore
-SCOPE: docs/context/PATTERNS.md
+SCOPE: docs/context/PATTERNS.md, docs/context/overrides/
 CONTEXT: Sharpen this project's conventions and known gotchas so the universal agents
   behave correctly here. Use the codebase and docs/context/ as source material.
 CONSTRAINT: Do NOT modify .ai-dev-exoskeleton/ files — those are universal.
   Only edit docs/context/ files.
-DONE WHEN: PATTERNS.md contains:
+DONE WHEN:
+  PATTERNS.md contains:
   1. Code style + import/naming conventions specific to this project
   2. Test patterns and how the test suite is structured
   3. Stack-specific gotchas (framework quirks, API surprises, common error patterns)
   4. At least one concrete example from this codebase per convention
+
+  Where a rule in .ai-dev-exoskeleton/ cannot hold on this project, write
+  docs/context/overrides/PROPOSED-<file name> — at most three. Each states the
+  rule it overrides (file:line), the fact that contradicts it (file:line), and
+  what applies instead. A differing threshold or convention is not an override;
+  it belongs in PATTERNS.md. Writing none is a valid outcome.
+
+  The session summary lists every proposal with a one-line reason.
 ```
 
 Add gotchas as you hit them: symptom → cause → the rule, with a `file:line` reference.
 Every bug that costs more than one round is worth a line here.
+
+Proposals are inert: agents read `docs/context/overrides/<file name>`, never `PROPOSED-*`.
+A wrong override silently disables a rule, so activation is a deliberate rename (drop the
+prefix); delete the ones that are wrong. Nothing waits on this — decide whenever you read the
+summary. See PLAYBOOK, `## Adapting a rule without forking`.
 
 ## Session 5 (Optional): First Real Task as Validation
 
@@ -277,8 +331,12 @@ After this session, do a post-session review (.ai-dev-exoskeleton/guides/checkli
 - [ ] Session 1: Copy .ai-dev-exoskeleton/ into your project repo
 - [ ] Session 2: Explore + docs/context/ (incl. its README.md index) + AGENTS.md — structured documentation created
 - [ ] Session 2: CLAUDE.md / GEMINI.md pointers to AGENTS.md — added
-- [ ] Session 3: Feedback loop — test commands verified and documented in AGENTS.md
-- [ ] Session 4: Conventions & gotchas — PATTERNS.md sharpened
+- [ ] Session 2: Default rigor line in the index — filled in by you
+- [ ] Session 3: Feedback loop — test commands verified and documented in AGENTS.md;
+      quality gates recorded in DEPENDENCIES.md (or "none available")
+- [ ] Optional (heavy, several modules): dependency rules + checker, recorded as a gate
+- [ ] Session 4: Conventions, gotchas & overrides — PATTERNS.md sharpened, at most three
+      PROPOSED- overrides listed (rename one to activate it)
 - [ ] Session 5: Validation — first real task completed successfully
 - [ ] Post-session review — gaps identified and filled
 
@@ -287,11 +345,12 @@ After this session, do a post-session review (.ai-dev-exoskeleton/guides/checkli
 | Session | Duration | Output |
 |---------|----------|--------|
 | Set up exoskeleton | 5 min | .ai-dev-exoskeleton/ folder in your project repo |
-| Explore + docs/context/ + AGENTS.md | 20-30 min | 5 context docs + index + project entry file |
-| Feedback loop | 10-15 min | Verified test commands documented in AGENTS.md |
-| Conventions & gotchas | 15-20 min | Sharpened PATTERNS.md |
-| Validation | 15-20 min | First completed task |
-| **Total** | **~20-90 min** | **Ready to ship** |
+| Explore + docs/context/ + AGENTS.md | 5-30 min | 5 context docs + index + project entry file |
+| Feedback loop | 5-30 min (legacy: more) | Verified test commands in AGENTS.md; quality gates in DEPENDENCIES.md |
+| Dependency rules (optional, heavy + several modules) | not counted | Dependency rules + checker, recorded as a gate |
+| Conventions, gotchas & overrides | 5-30 min | Sharpened PATTERNS.md, ≤3 PROPOSED- overrides |
+| Validation (optional) | 15-20 min | First completed task |
+| **Total** | **~20-90 min** — a small repo lands at the low end | **Ready to ship** |
 
 ## Tips for Large Legacy Codebases
 

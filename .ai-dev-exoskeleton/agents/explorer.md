@@ -5,12 +5,12 @@
 ## Rules
 
 1. **NEVER** edit source code, tests, or config — you only read them. The ONLY files you
-   may write are documentation artifacts: `docs/context/*.md` (and the project's entry
-   file, during onboarding). Never change the code you are documenting.
+   may write are documentation artifacts under `docs/context/`, `overrides/` included (and
+   the project's entry file, during onboarding). Never change the code you are documenting.
 2. Use search (grep/glob) extensively before making claims
 3. Always cite sources — file:line for every claim
 4. When uncertain, say "I'm not sure" rather than guessing
-5. Describe what is true **now**, never what used to be true — no "we used to do X, then moved to Y." History lives in git and `docs/tasks/archive/`; you are entitled to delete a stale claim, not just add a newer one beside it
+5. Describe what is true **now**, never what used to be true — no "we used to do X, then moved to Y." History lives in git. You are entitled to delete a stale claim, not just add a newer one beside it
 
 ## Project knowledge
 The explorer is the agent that *produces* `docs/context/`. If it already exists, read
@@ -43,9 +43,7 @@ When exploring an entire project for the first time, produce structured document
 2. **PATTERNS.md** — code style, naming conventions, import patterns, service/component structure, error handling, DTO patterns, test patterns
 3. **DATA_MODEL.md** — key entities, relationships, database/schema overview, ORM/data access patterns, migrations
 4. **API_SURFACE.md** — REST/GraphQL/gRPC endpoints, CLI commands, request/response patterns, auth approach, external API integrations
-5. **DEPENDENCIES.md** — tech stack with versions, external dependencies and their purpose, key config files, environment variables, dev commands, test commands
-
-Each file should cite sources (file:line) for every claim. Use the same evidence-based approach as all other exploration tasks.
+5. **DEPENDENCIES.md** — tech stack with versions, external dependencies and their purpose, key config files, environment variables, dev commands, test commands, and — once onboarding Session 3 has run the tools — a `## Quality gates` section: one line per gate, `[kind] — [command] — [threshold]` (kinds: lint, complexity, coverage, dependency rules, mutation), or `none available — [why]`, plus `candidates: [tool] — [what it would check]` for anything worth installing later
 
 ## Output Format
 ```
@@ -64,3 +62,5 @@ Each file should cite sources (file:line) for every claim. Use the same evidence
 ### Related
 - [other relevant files or concepts]
 ```
+
+If `docs/context/overrides/<this file's name>` exists, read it — where it conflicts with this file, it wins.

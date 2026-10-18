@@ -54,6 +54,10 @@ read, and drifting from constraints stated at the top. Watch for those symptoms 
 the token counter. When they appear, end the session and start a fresh one from the plan
 and the task folder — that is exactly what those artifacts are for.
 
+**So the question at a session boundary is not "how full is the window?" but "is the
+artifact layer current enough that ending here costs nothing?"** If the phase checkboxes are
+ticked and `CONTEXT.md` still describes the work, ending the session is routine hygiene, not
+a loss to put off.
 
 ### Law 2: Always Give a Stop Condition — and Say What NOT to Do
 Two things belong in every prompt, and the second one is the underrated half:
@@ -92,13 +96,13 @@ For debugging, ALWAYS require a full trace before any fix. Never let the AI patc
 Why: A datetime serialization bug took me 3 rounds and a Redis issue several wrong guesses — one upfront trace would have saved all of it.
 
 ### Law 4: Tests Are the Loop Condition
-The AI must run tests after every change. If tests don't exist, write them FIRST.
+The AI must run tests after every change. No behaviour ships without a test you have seen fail on it — either before the code exists, or by breaking the code on purpose and watching the test go red. A test that has never failed may be unable to.
 
 **Prerequisite:** The feedback loop must be established before real work begins — verify that test commands actually run from the CLI during onboarding (see Session 3 in the [onboarding workflow](workflows/new-project-onboarding.md)). Without a working test command, this law can't be enforced.
 
-**Template:** "Write a failing test for [expected behavior]. Then implement the minimal fix. Run tests. If red, analyze why — don't guess."
+**Template:** "Cover [expected behavior] with a test at the highest level this project can run — end-to-end where it exists, unit tests beneath — and see it fail on that behaviour. Implement the minimal fix. Run tests. If red, analyze why — don't guess." The level matters because unit tests pass happily while the product behaviour they were meant to guard stays broken.
 
-Why: A test is the only thing that lets the agent know it's wrong without you telling it. Test-driven agent loops are the single biggest productivity multiplier — no test, no self-correction.
+Why: A test is the only thing that lets the agent know it's wrong without you telling it. Test-gated agent loops are the single biggest productivity multiplier — no test, no self-correction.
 
 ### Law 5: Parallel by Default
 Independent work should run concurrently, not one thing at a time. There are **two
@@ -115,6 +119,8 @@ Discipline it requires:
   other (this is why every plan phase declares `Scope` and `Depends on`).
 - One worktree per session; merge each one back after its tests pass.
 - Name your sessions so you know which is which when you switch between them.
+- Two sessions that both edit `docs/context/` meet as an ordinary git conflict, which you
+  resolve. That is intended: the alternative is the second silently overwriting the first.
 
 **2. Subagent parallelism (harness-dependent).**
 Some harnesses can fan out subagents inside a single session; others can't, or do it
@@ -124,7 +130,6 @@ services or tracing both sides of a service boundary at once.
 **Template (subagent form):** "Use parallel agents: Agent 1 handles [service A], Agent 2
 handles [service B]. Each reads existing code first, then implements, then runs tests
 independently."
-
 
 ---
 
@@ -140,29 +145,56 @@ own session.
 
 ---
 
+## Light or heavy
+
+A process too heavy for a small change gets abandoned, so every task runs at one of two
+rigors, decided by one question:
+
+> **Would you have asked another human to review this change?** Yes means heavy; no means light.
+
+It tracks blast radius, not size: three lines in a permission check are heavy, a large
+internal admin screen may be light.
+
+- **Light** is the default, and most work stays there. A one-phase plan is fine; skip the
+  plan-review session.
+- **Heavy** adds the plan review, an `adversarial-review`, and the gates in
+  `.ai-dev-exoskeleton/references/heavy-mode.md`, which buy down future regressions — worth
+  it on long-lived, shared, money- or permission-touching code, not on throwaway work.
+
+**You pick, not the agent.** The project's default sits in the `docs/context/` index as
+`**Default rigor:**`, decided once instead of re-argued while tired; `build-context` offers
+it at the end and records the task's answer under `## Rigor` in `CONTEXT.md`. The agent may
+argue for heavier, never for lighter.
+
+The switch covers the feature workflow, where `build-context` asks for it. A bugfix or a
+refactor has no recorded rigor: there, the blast radius of the fix itself tells you whether
+to add a review pass by hand.
+
+`REVIEW.md` ends with `### Risk`: `low | medium | high`, and why. **Low risk plus real
+evidence — a filled `### Evidence` — means the reviewed diff need not be read. Anything else
+means it must be.** The fix session's own diff was never reviewed or rated: read that one.
+
+---
+
 ## Session Templates
 
 ### Before ANY Session
-Ask yourself:
-1. What is the ONE outcome I want?
-2. Which mode? (plan / implement / debug / review / explore)
-3. What files/services are in scope?
-4. **What must it NOT do?** (the constraint — usually the highest-value line in the prompt)
-5. What does "done" look like?
-6. Can I break this into a smaller piece?
+Answer the six questions in `checklists/pre-session.md` — above all, **what must it NOT do?**
 
-### Prompt Structure (Universal and Optional)
+### Prompt Scaffold (optional)
 ```
 MODE: [plan|implement|debug|review|explore]
 SCOPE: [files or directories]
-CONTEXT: [1-2 sentences of what and why]
 CONSTRAINT: [what NOT to do]
 DONE WHEN: [specific exit condition]
 ```
 
+Add `CONTEXT:` (a sentence or two of what and why) in any mode, and `ERROR:` (the pasted
+traceback) in debug mode.
+
 This helps most if you tend to ramble at the AI instead of getting to the point — I used
-to, and the fields forced me to decide what I actually wanted before I started typing.
-Entirely optional: if it helps, use it; if you already write tight prompts, skip it.
+to, and the fields forced me to decide what I actually wanted before I started typing. If
+you already write tight prompts, skip it.
 
 ---
 
@@ -209,11 +241,31 @@ defined" costs one message and catches what confidence hides.
 
 ## Progress Tracking
 
-After each session, ask yourself:
-- Did I achieve the ONE outcome? (yes/no)
-- Did the AI need course correction? (how many times?)
-- Was the scope right? (too big / just right / too small)
-- What would I constrain differently next time?
+After each session, run `checklists/post-session.md` — above all, ask what you would
+constrain differently next time.
+
+---
+
+## Adapting a rule without forking
+
+Editing `.ai-dev-exoskeleton/` for one project loses the edit on the next upgrade. What you
+learned goes in one of three places, and they are not interchangeable:
+
+| What you learned | Where it goes |
+|---|---|
+| A fact about the project | `docs/context/*.md` |
+| A threshold or convention that differs from the defaults | `docs/context/PATTERNS.md` |
+| A rule of the method that cannot hold on this project | `docs/context/overrides/<file name>` |
+
+Every agent and command file reads its override last, and the override wins. Keep that row
+rare. Legitimate: no test suite this quarter, so the test rule gives way to what the project
+can run. Illegitimate: "we prefer 120-line functions" — that is row two, and routing it here
+grows a per-project fork back under a new name. Onboarding proposes at most three, as inert
+`PROPOSED-` files; renaming one activates it.
+
+Two open risks. An LLM resolves the conflict between two prose files at inference time — the
+soft convention `README.md` admits models violate. And a team inside one harness already has
+native settings hierarchies for this; for them the layer is dead weight.
 
 ---
 
@@ -226,6 +278,11 @@ model, and no review artifact makes a change someone else's fault.
 The practical form of that rule: **if you don't understand the code, you don't get to press
 enter.** Not because understanding is a virtue, but because you are the one who will be
 asked why it works, and the one who will fix it at 2am when it doesn't.
+
+Owning it includes deciding what to read. When the review rates the risk low and a filled
+`### Evidence` backs it, that reviewed diff need not be read — an owner's call, and the
+result is still yours. At medium or high risk, and on whatever the fix session changed after
+the review, the rule above stands.
 
 ## What to Delegate, and What Never To
 

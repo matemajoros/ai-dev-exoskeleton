@@ -21,9 +21,10 @@ Read @.ai-dev-exoskeleton/commands/build-context.md and follow it.
 I want to build [feature description].
 ```
 
-Output: `docs/tasks/[yyyymmdd-short-description]/CONTEXT.md` — the business and technical
+Output: `docs/tasks/[yyyymmdd-task-name]/CONTEXT.md` — the business and technical
 decisions, in and out of scope. This file lets any later session rebuild context without
-re-doing the Q&A.
+re-doing the Q&A. Its last question is the task's rigor, and your answer is recorded there
+under `## Rigor`; every later step reads it.
 
 ### Step 1: Plan
 
@@ -47,7 +48,7 @@ SCOPE: [all relevant directories]
 CONTEXT: Building [feature description]. Read docs/context/ first
   (start at docs/context/README.md) to understand existing architecture.
 CONSTRAINT: Do NOT implement. Only create a plan document.
-DONE WHEN: docs/tasks/[yyyymmdd-short-description]/PLAN.md created with a phased
+DONE WHEN: docs/tasks/[yyyymmdd-task-name]/PLAN.md created with a phased
   breakdown — each phase has Scope, Depends on, Verify, and Rollback.
 
 Use @.ai-dev-exoskeleton/agents/planner.md
@@ -57,15 +58,15 @@ Use @.ai-dev-exoskeleton/agents/planner.md
 
 Review the plan. Adjust phases. Each phase should be independently testable.
 
-### Step 2 (optional): Review the Plan
+### Step 2 (heavy): Review the Plan
 
-**Worth it on critical or far-reaching work; skip it for small features** — on a two-file
-change it rarely earns its keep. When the cost of being wrong is high, this is the cheapest
-place to catch it, because nothing has been built yet:
+**Mandatory when the task is heavy, skipped when light** (see "Light or heavy" in
+`PLAYBOOK.md`). Nothing has been built yet, so this is the cheapest place to catch a wrong
+plan:
 
 ```
 MODE: plan
-SCOPE: docs/tasks/[yyyymmdd-short-description]/PLAN.md + all source files it references
+SCOPE: docs/tasks/[yyyymmdd-task-name]/PLAN.md + all source files it references
 CONTEXT: Review this plan against the actual codebase before we implement.
   Read docs/context/ for architecture and pattern rules.
 CONSTRAINT: Do NOT implement anything. Only analyze and update the plan.
@@ -80,17 +81,19 @@ DONE WHEN: Plan updated. Specifically check:
 Use @.ai-dev-exoskeleton/agents/planner.md
 ```
 
-For an independent second opinion on high-stakes work, run `adversarial-review` on the plan
-with a different model (see `.ai-dev-exoskeleton/commands/adversarial-review.md`).
+Heavy also means a second opinion from outside: run `adversarial-review` on the same plan in
+a **different model or harness** (see `.ai-dev-exoskeleton/commands/adversarial-review.md`).
+The planner says so when it hands you a heavy plan, so you don't have to remember it.
 
 ### Step 3: Implement the Phases
 
 ```
 MODE: implement
 SCOPE: [files listed in this phase of the plan]
-CONTEXT: Implementing Phase [N] of docs/tasks/[yyyymmdd-short-description]/PLAN.md
-CONSTRAINT: Only change files listed in this phase. Write tests first.
-DONE WHEN: All tests pass, including existing ones.
+CONTEXT: Implementing Phase [N] of docs/tasks/[yyyymmdd-task-name]/PLAN.md
+CONSTRAINT: Only change files listed in this phase. No behaviour without a test you've seen fail.
+DONE WHEN: All tests pass, including existing ones. On a heavy task, the recorded gates are
+  green too.
 
 Use @.ai-dev-exoskeleton/agents/implementer.md
 ```
@@ -105,6 +108,10 @@ only if they share no files and neither depends on the other.** That's exactly w
 `Scope` and `Depends on` fields in the plan are for. Without a harness that supports
 subagents, use separate sessions in separate git worktrees (Law 5).
 
+**A heavy plan ends with a hardening phase**, where the implementer only writes tests and
+checks that they would catch a wrong behaviour. Run it like any other phase — ideally in its
+own session, so the agent isn't grading tests it just wrote.
+
 ### Step 4: Integration Review
 
 ```
@@ -112,7 +119,7 @@ MODE: review
 SCOPE: All files changed across all phases
 CONTEXT: Reviewing the complete [feature name] implementation
 CONSTRAINT: Do NOT fix anything. Only report issues.
-DONE WHEN: REVIEW.md written with findings by severity.
+DONE WHEN: REVIEW.md written: acceptance rulings, findings by severity, evidence, risk.
 
 Use @.ai-dev-exoskeleton/agents/reviewer.md
 ```
@@ -141,6 +148,11 @@ Once the review fixes land, **you** exercise the feature — click it, call it, 
 the agent, and not the test suite alone. A green suite means the code does what the tests
 say; only you can tell whether it does what you actually wanted.
 
+Walk `PLAN.md`'s `## Acceptance`, starting from the reviewer's met / not met / partial
+rulings — a ruling says where to look first, not that you can skip looking. Then the diff:
+low risk with a filled `### Evidence` means the reviewed diff need not be read; anything
+else, read it. Step 5's own changes came after the review — read those either way.
+
 This is the last human gate, and it's where the whole loop closes. Anything it turns up
 goes back through debug → fix, not into a "we'll catch it later" pile.
 
@@ -149,13 +161,11 @@ goes back through debug → fix, not into a "we'll catch it later" pile.
 ## Key Principles
 - **Plan before you implement.** Not necessarily in a separate session — but always as a
   separate, finished step, with the plan written down before code starts.
-- **Each phase should be independently testable.**
 - **Good context makes the later prompts short.** If you have to write an elaborate prompt
   to get a decent plan, that's a sign the context step was rushed.
 - **Parallelise only what shares no files and has no dependency.** Subagents if your harness
   has them, separate worktrees if it doesn't.
-- **Two gates need you; the rest doesn't.** Be genuinely present and focused during Step 0
-  (context) — it's the highest-leverage step in the whole workflow — and test the result
-  yourself at the end. Between those two, checking the output is usually enough; you don't
-  have to supervise every move.
-- **If something goes wrong, the task folder has everything needed to recover.**
+- **Two gates need you; four decisions come to you.** Be genuinely present during Step 0
+  (context) — the highest-leverage step in the workflow — and test the result yourself at the
+  end. Between them, the plan, a root-cause analysis, the review findings left for you and a
+  new test seam (which proceeds unless you stop it) each come back as a one-line decision.
