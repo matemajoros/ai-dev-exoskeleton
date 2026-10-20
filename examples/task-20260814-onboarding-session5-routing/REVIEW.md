@@ -3,11 +3,11 @@
 ### Acceptance
 - A reader reaching Session 5 sees a table naming a workflow and a path for feature,
   bug/error and restructuring work, not a fixed prompt block — met — the three-row table
-  sits at `.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md:314-318`, and
+  sits at `.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md:392-396`, and
   Session 5 holds no fenced block
 - A first task that fits none of the rows has somewhere to fall back — met — the fallback
   sentence names the pre-session checklist by path
-  (`.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md:323-325`)
+  (`.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md:401-403`)
 - Every path in the table names a file that exists — met — `fd` lists `feature.md`,
   `debug.md` and `refactor.md` at the paths the rows give, and `pre-session.md` at the
   fallback's path (Evidence)
@@ -19,7 +19,7 @@
 —
 
 ### NOTE
-- [`.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md:323-325`] The fallback
+- [`.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md:401-403`] The fallback
   sentence says the pre-session checklist "holds copy-paste session openers for plan,
   implement, and debug" — three of the four. `pre-session.md:74` also has a
   `### Feature Session (start here)` template, which this sentence doesn't mention. Harmless

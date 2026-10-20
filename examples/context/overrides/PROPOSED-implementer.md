@@ -2,7 +2,7 @@
 
 > Inert. Agents read `docs/context/overrides/implementer.md`, never a `PROPOSED-` file;
 > activating this one is a rename, and the rename is a human's call
-> (.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md:302-304).
+> (.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md:380-383).
 
 ## Rule overridden
 

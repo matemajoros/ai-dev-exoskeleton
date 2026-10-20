@@ -35,6 +35,12 @@ of the files every session loads.
 - **The knowledge base knows what changed.** The implementer reports each `docs/context/`
   edit as added, modified or removed, with `file:line`. Onboarding records the project's
   quality gates ("none available" is a valid answer) and asks for a default rigor.
+- **What the platform publishes by default is recorded once per project.** Onboarding
+  Session 2 ends `ARCHITECTURE.md` with `## Exposure`: one line per surface,
+  `protected | unprotected | unknown`. `protected` needs a `file:line` that guards that
+  surface's own access path; "unknown, with a click path" is a result, not a failure. The
+  agent produces the list and you only correct it. A plan phase that opens a surface
+  carries `Guard:` and one denial acceptance item.
 - **Overrides without forking.** Each agent and command ends with one line: a matching file
   in `docs/context/overrides/` wins. PLAYBOOK's "Adapting a rule without forking" says what
   belongs there and states the layer's open risks. Onboarding may propose at most three,
@@ -68,14 +74,14 @@ of the files every session loads.
 **Migrating from 0.2.0.** Replace the folder; re-home anything you had edited inside the old one
 by PLAYBOOK's `## Adapting a rule without forking` table (`overrides/` is its rare row). Replace
 `CLAUDE.md` / `GEMINI.md`, and merge the new generic top of `AGENTS.md` above your project's own
-sections. Re-run onboarding Session 3 (quality gates) and Session 4 (override proposals). Add `**Default rigor:** light | heavy — [why, for this project as a whole]` to your
+sections. Re-run onboarding Session 3 (quality gates) and Session 4 (override proposals), and Session 2's exposure pass only: `docs/context/ARCHITECTURE.md` gains `## Exposure`. Add `**Default rigor:** light | heavy — [why, for this project as a whole]` to your
 `docs/context/README.md`. Output formats changed: `CONTEXT.md` gained `## Rigor` (a task already in flight has none, which reads as light); `REVIEW.md` gained
 `### Acceptance`, `### Evidence` and `### Risk`; the implementer's Step 1 block gained `SEAM:`
 and its DONE block `- Context:` lines.
 
 Payload: 23 files. Agents and commands: 668 lines, matching 0.2.0's 668. All of
-`.ai-dev-exoskeleton/`: 1,835 lines, up from 1,642 — the two `references/` files, onboarding's
-gates and override steps, and PLAYBOOK's two new sections.
+`.ai-dev-exoskeleton/`: 1,922 lines, up from 1,642 — the two `references/` files, onboarding's
+gates, override and exposure steps, and PLAYBOOK's two new sections.
 
 ## [0.2.0] — 2026-08-21 — honest claims, a worked example
 

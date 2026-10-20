@@ -39,7 +39,7 @@ doesn't, generating it is the whole onboarding job (see below).
 ### For Onboarding / Full Exploration
 When exploring an entire project for the first time, produce structured documentation in `docs/context/`:
 
-1. **ARCHITECTURE.md** — directory structure, module boundaries, architecture pattern, entry points, service boundaries, deploy process, ASCII diagram
+1. **ARCHITECTURE.md** — directory structure, module boundaries, architecture pattern, entry points, service boundaries, deploy process, ASCII diagram, and a last `## Exposure` section — what the platform publishes by default, whether or not this code calls it; format and questions in `.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md`, `### What the platform exposes by default`
 2. **PATTERNS.md** — code style, naming conventions, import patterns, service/component structure, error handling, DTO patterns, test patterns
 3. **DATA_MODEL.md** — key entities, relationships, database/schema overview, ORM/data access patterns, migrations
 4. **API_SURFACE.md** — REST/GraphQL/gRPC endpoints, CLI commands, request/response patterns, auth approach, external API integrations

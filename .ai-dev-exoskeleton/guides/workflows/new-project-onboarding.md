@@ -48,6 +48,10 @@ DONE WHEN: The following files are created:
      - Service boundaries and communication methods
      - Deploy process (CI/CD, environments)
      - ASCII diagram of the architecture if useful
+     - A last `## Exposure` section: what the platform publishes by default, whether or
+       not this code calls it. One line per surface: `[surface] — protected | unprotected | unknown — [evidence]`;
+       `none — [why]` is a complete answer. Work the questions in "What the platform
+       exposes by default" below before writing it
 
   2. docs/context/PATTERNS.md — coding conventions and patterns:
      - Code style conventions (tabs/spaces, formatting, linting)
@@ -93,7 +97,7 @@ DONE WHEN: The following files are created:
 
      | File | Holds | Read it when |
      |------|-------|--------------|
-     | `ARCHITECTURE.md` | [one line] | planning, reviewing, cross-service debugging |
+     | `ARCHITECTURE.md` | [one line] | planning, reviewing, cross-service debugging, a phase creates a new place data lives |
      | `PATTERNS.md` | [one line] | implementing, reviewing |
      | `DATA_MODEL.md` | [one line] | planning, data-layer work |
      | `API_SURFACE.md` | [one line] | API work, integration debugging |
@@ -176,6 +180,95 @@ single source of truth.
 Then fill the index's **Default rigor** line yourself. It is the answer `build-context`
 offers on every task, so decide it once, for the typical change here (PLAYBOOK,
 `## Light or heavy`).
+
+Then read the `## Exposure` list and correct what is wrong about this project: the
+platform's defaults are the agent's half, a decommissioned bucket or a surface that was
+never built is yours. Walk any click path the agent wrote. Nothing waits on this.
+
+### What the platform exposes by default
+
+Answer these from the repository, for the developer — never ask them what their platform
+exposes; that is the knowledge they lack. Then write `## Exposure`.
+
+```
+1. For every place data lives or a request arrives — table, collection, bucket, queue,
+   topic, cache, search index, endpoint, function, file share, webhook receiver, admin
+   console — does the platform publish an interface to it that nobody in this repo wrote, or
+   did you write one and leave it unguarded because nobody outside was expected to find it?
+2. Which credentials ship inside something a user holds: a web bundle, a mobile binary, a
+   desktop app, a CLI, a published image, public config? Assume each one is readable. What
+   can its holder reach?
+3. For each surface, what denies an unauthorized caller, and which file here says so?
+4. With nothing configured, is that surface's default deny or allow?
+5. Does a server-side admin or service credential hide the question?
+   **"We don't call that API" is not "that API isn't exposed."**
+
+Anything questions 1-4 cannot settle from a file in this repo is `unknown` and gets a
+click path.
+```
+
+`## Exposure` is the last section of `docs/context/ARCHITECTURE.md`. It records what the
+platform and infrastructure publish by default, whether or not this code calls it, one
+line per surface the platform serves **separately**: if it serves per table, collection or
+bucket, that is one line each — a single line for the API hides the case this section
+exists for:
+
+```
+[surface name] — protected | unprotected | unknown — [evidence]
+```
+
+- `protected` requires a `file:line` in this repo that enforces **this surface's own access path**
+  — a policy or rules file, a migration that grants or revokes, an IaC resource, a
+  firewall rule — and it must be **in force for that surface**: a rule that exists but is
+  not enabled, attached or applied is `unknown`, not `protected`. Guarding another path is not evidence: app- or route-level auth does not
+  protect a surface the platform serves directly, and a server-side admin or service
+  credential is never evidence, because it hides the question. No citation means `unknown`,
+  never `protected`.
+- `unprotected`: the surface is served, this repo holds no guard for its own access path,
+  and the platform's default for it is allow. The evidence is the absence — say what you
+  looked for and where. It is a defect to close, not a state to live with: open a task for it.
+- `unknown`: the answer lives in a console or setting you cannot read from the repo. It
+  carries its click path and means "go look". A recorded `unknown` is a success — the gap
+  is written down instead of assumed away.
+- When the repo shows no guard and you did not have to look outside it to know that, the
+  honest status is `unprotected`, not `unknown`: `unknown` is for what you cannot see, not
+  for what you would rather not call a defect.
+
+| Concept | The word | Avoid |
+|---|---|---|
+| One thing the platform serves | **surface** | endpoint, resource, asset, boundary, perimeter |
+| Its state | `protected` · `unprotected` · `unknown` | open/closed, secure/insecure, public/private, safe/unsafe — and never `exposed` as a status: every surface in the list is exposed, that is why it is listed |
+
+What only a console can answer gets a **click path** — five minutes, no expertise, no staging
+environment, and never a probe against production:
+
+```
+unknown — open [the provider console] → [the screen] → [the setting]; protected looks like
+[what you should see]. Write the answer back on this line, dated YYYY-MM-DD.
+```
+
+A repo that publishes nothing is the fast path — the whole section is one line:
+
+```
+## Exposure
+
+none — [what was checked, and why nothing is published]
+```
+
+This file is committed. Surface names and statuses only. Never a key, an id, a URL, a payload or a row of data.
+
+Scope: what the platform serves without being asked — not secrets, not dependency CVEs, not a threat model.
+
+**Optional, where a local emulator exists.** A probe that tries each surface as an
+unauthenticated caller belongs to this project: write it in the project's own language,
+inside its own tree, never in `.ai-dev-exoskeleton/`. It runs against the emulator, never
+against staging and never against production. Record it under `## Quality gates` in
+`docs/context/DEPENDENCIES.md`, after which the implementer and reviewer gate steps run it
+and nothing else changes:
+
+```
+exposure — [command] — 0 unprotected surfaces
+```
 
 ## Session 3: Establish Feedback Loop (5-30 min)
 
@@ -332,9 +425,11 @@ After this session, do a post-session review (.ai-dev-exoskeleton/guides/checkli
 - [ ] Session 2: Explore + docs/context/ (incl. its README.md index) + AGENTS.md — structured documentation created
 - [ ] Session 2: CLAUDE.md / GEMINI.md pointers to AGENTS.md — added
 - [ ] Session 2: Default rigor line in the index — filled in by you
+- [ ] Session 2: `## Exposure` recorded in ARCHITECTURE.md — `none` and a standing `unknown` are both valid
 - [ ] Session 3: Feedback loop — test commands verified and documented in AGENTS.md;
       quality gates recorded in DEPENDENCIES.md (or "none available")
 - [ ] Optional (heavy, several modules): dependency rules + checker, recorded as a gate
+- [ ] Optional (local emulator exists): exposure probe, recorded as a gate
 - [ ] Session 4: Conventions, gotchas & overrides — PATTERNS.md sharpened, at most three
       PROPOSED- overrides listed (rename one to activate it)
 - [ ] Session 5: Validation — first real task completed successfully
@@ -345,7 +440,7 @@ After this session, do a post-session review (.ai-dev-exoskeleton/guides/checkli
 | Session | Duration | Output |
 |---------|----------|--------|
 | Set up exoskeleton | 5 min | .ai-dev-exoskeleton/ folder in your project repo |
-| Explore + docs/context/ + AGENTS.md | 5-30 min | 5 context docs + index + project entry file |
+| Explore + docs/context/ + AGENTS.md | 5-30 min | 5 context docs (exposure recorded in ARCHITECTURE.md) + index + project entry file |
 | Feedback loop | 5-30 min (legacy: more) | Verified test commands in AGENTS.md; quality gates in DEPENDENCIES.md |
 | Dependency rules (optional, heavy + several modules) | not counted | Dependency rules + checker, recorded as a gate |
 | Conventions, gotchas & overrides | 5-30 min | Sharpened PATTERNS.md, ≤3 PROPOSED- overrides |
@@ -359,4 +454,4 @@ After this session, do a post-session review (.ai-dev-exoskeleton/guides/checkli
 - Ask the team for their "if you could only read 5 files, which ones?" — add those to AGENTS.md Key Files.
 - Legacy projects often have undocumented conventions. As you discover them, add to docs/context/PATTERNS.md immediately.
 - If there are no tests, your first real task should be adding test infrastructure — agentic engineering without tests is flying blind.
-- Start with ARCHITECTURE.md and DEPENDENCIES.md — these provide the most immediate value. Fill in DATA_MODEL.md, API_SURFACE.md, and PATTERNS.md as you work in specific areas.
+- Start with ARCHITECTURE.md and DEPENDENCIES.md — they give the most immediate value.

@@ -6,7 +6,7 @@ copied into an adopter's project — it lives under `examples/` precisely so nob
 it by copying `docs/` or cloning this repo (see `docs/context/README.md`).
 
 The table below follows the shape onboarding actually generates
-(`.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md:84-113`). The agents in
+(`.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md:86-116`). The agents in
 `.ai-dev-exoskeleton/` are universal; everything specific to a project would live here in a
 real adoption.
 
@@ -14,7 +14,7 @@ real adoption.
 
 | File | Holds | Read it when |
 |------|-------|--------------|
-| `ARCHITECTURE.md` | The two-tier layout and 23-file payload, the five agents and what each may write, the four commands, the artifact flow, the two gates and four decisions | planning, reviewing, exploring |
+| `ARCHITECTURE.md` | The two-tier layout and 23-file payload, the five agents and what each may write, the four commands, the artifact flow, the two gates and four decisions, what the platform exposes by default (none here) | planning, reviewing, exploring, a phase creates a new place data lives |
 | `PATTERNS.md` | This repo's writing conventions: agent-file skeleton and closing override line, imperative voice, `NEVER` / `Do NOT`, root-relative paths, the optional prompt scaffold | implementing, reviewing |
 | `DATA_MODEL.md` | **Skipped.** No database, no entities, no schema — see below | — |
 | `API_SURFACE.md` | **Skipped.** No REST/GraphQL/CLI surface — see below | — |
@@ -25,7 +25,7 @@ real adoption.
 `overrides/PROPOSED-implementer.md` proposes adapting the implementer's test rule, which this
 repo, having no test suite, cannot satisfy. It stays inert: agents read only
 `overrides/<file name>`, never `PROPOSED-*`, and activating one is a human's rename
-(`.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md:302-304`) — nobody has made
+(`.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md:380-383`) — nobody has made
 it, and agents never look under `examples/` for overrides anyway.
 
 On a small repo, reading all of these is cheap — do that. On a large repo, scope down to
@@ -39,8 +39,8 @@ and update this index.
 
 ## Why two files are missing, not stubbed
 
-The six-file menu the explorer offers during onboarding
-(`.ai-dev-exoskeleton/agents/explorer.md:42-47`) is a **menu, not a checklist.** This
+The five-file menu the explorer offers during onboarding
+(`.ai-dev-exoskeleton/agents/explorer.md:42-46`) is a **menu, not a checklist.** This
 repository is markdown files an agent reads — no database, no schema, no entities to
 relate, and no REST/GraphQL/CLI surface to document. Writing `DATA_MODEL.md` or
 `API_SURFACE.md` just to hold the sentence "not applicable" would be the exact ritual this
