@@ -8,7 +8,7 @@ MODE: plan
 SCOPE: [what you want to refactor]
 CONTEXT: I want to refactor [X] to [Y] because [reason]
 CONSTRAINT: Do NOT change any code. Analyze all consumers first.
-DONE WHEN: Impact analysis written to docs/tasks/[yyyymmdd-refactor-name]/PLAN.md
+DONE WHEN: Impact analysis written to docs/tasks/[yyyymmdd-task-name]/PLAN.md
 
 Steps:
 1. Find ALL consumers of [thing being refactored] using grep/search across entire codebase

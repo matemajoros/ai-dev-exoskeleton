@@ -26,7 +26,7 @@ abandon.
 - A **large construction firm** (hundreds of employees, ~10-person IT department). Same
   workshop, same handover. They took it into their day-to-day work too. This one matters
   most to me: it is not a software company, and a small IT team adopted it anyway —
-  because it's 20 files of plain markdown, not a platform.
+  because it was 20 files of plain markdown, not a platform.
 - **An intern I taught.** Roughly 4× the throughput he had before, while simultaneously
   getting through all his university exams — 4–5 features shipped in the same window.
 
@@ -42,7 +42,7 @@ where you check whether it actually works. The agent plans, implements, and revi
 hold the line on scope, correctness, and "done."
 
 Writing a sharp, focused prompt is a skill, and most vague results come from a vague ask.
-These keywords are a scaffold for it — use them if you feel the AI usually does other things that you asked for:
+These keywords are a scaffold for it — use them if you feel the AI usually does other things than you asked for:
 
 ```
 MODE:       plan | implement | review | debug | explore
@@ -54,11 +54,11 @@ DONE WHEN:  the specific exit condition
 Work flows through small, testable sessions:
 
 ```
-build-context  →  plan  →  implement (test-first)  →  review  →  fix  →  test it yourself
-   align on        phased    one phase per            report      targeted    you exercise
-   the feature     plan      session, tests pass      findings    fixes       the result
-   ▲                                                                          ▲
-   └────────────────── the two gates that really need you ────────────────────┘
+build-context  →  plan  →  implement (tested)  →  review  →  fix  →  test it yourself
+   align on        phased    one phase per          report     targeted   you exercise
+   the feature     plan      session, tests pass    findings   fixes      the result
+   ▲                                                                      ▲
+   └─────────────────── your two mandatory checkpoints ───────────────────┘
 ```
 
 Each stage is a universal role in `.ai-dev-exoskeleton/agents/`
@@ -84,10 +84,20 @@ whatever tool each of them uses.
 
 ## How to use it
 
-1. **Copy into your repo's root:** the `.ai-dev-exoskeleton/` folder, `AGENTS.md`, and
-   `CLAUDE.md` / `GEMINI.md` if you use those harnesses. All four are generic — nothing in
-   them is specific to this repo. (Don't copy `docs/` — that's this repo's own project
-   knowledge; onboarding writes yours.)
+1. **Get the files onto disk, one of two ways:**
+   - **Copy into your repo's root:** the `.ai-dev-exoskeleton/` folder, `AGENTS.md`, and
+     `CLAUDE.md` / `GEMINI.md` if you use those harnesses. All four are generic — nothing in
+     them is specific to this repo. (Don't copy `docs/` — that's this repo's own project
+     knowledge; onboarding writes yours.)
+   - **Clone this repository and start your project inside it.** You inherit every file we
+     own, so delete them first: `docs/`, `examples/`, `CHANGELOG.md`, `.github/`, and replace
+     `LICENSE` and `README.md` with your own. Keep `.ai-dev-exoskeleton/`, `AGENTS.md`, and
+     `CLAUDE.md` / `GEMINI.md` — the same files the copy path uses.
+
+   That install payload — `.ai-dev-exoskeleton/` plus `AGENTS.md`, `CLAUDE.md` and
+   `GEMINI.md` — stays at or under 30 files, and is 23 today. `docs/context/` (generated per
+   project), `examples/`, and this repository's `README.md`, `CHANGELOG.md`, `LICENSE` and
+   `.github/` are never copied, so they don't count.
 2. **Run onboarding** (`.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md`) —
    the agent explores the codebase and writes `docs/context/` (architecture, patterns,
    conventions, gotchas) plus its index, and fills in the repo entry file.
@@ -128,18 +138,26 @@ approve the agent's work without actually reading it, that discipline is gone an
 the model's raw, unassisted quality. This system makes the right process easy and legible —
 it does not make it automatic.
 
-**How much of it you can automate, in my experience:** more than you'd think. With good
-context, a good harness, and good agents, I've found **two human gates are enough**:
+**Where you are actually needed.** Two points where your presence is mandatory — the work
+stops without you:
 
-1. **Context building** — be genuinely present and focused here. This is the highest-leverage
-   moment in the whole loop, and the one thing you cannot delegate.
+1. **Context building** — the highest-leverage moment in the loop, and the one thing you
+   cannot delegate.
 2. **A manual test after the review fixes land** — you, exercising the actual thing, before
-   it's called done.
+   it is called done.
 
-The steps between them — planning, implementing phase by phase, reviewing, applying fixes —
-can run even without you. So no, it isn't
-true that none of this can be automated. But I'd keep those two gates. The first is where
-the work gets its direction; the second is where you find out whether it actually works.
+Between them the work runs without you, with four moments where an agent brings you a
+decision:
+
+- **The plan**, before implementation starts — this is where mistakes are still free.
+- **A root-cause analysis**, before any debugging fix is applied. The debugger blocks here
+  by design: it will not touch code until you confirm.
+- **The review findings the fix session left you** — the design trade-offs and ambiguous
+  requirements it deliberately declined to decide on your behalf.
+- **A new test seam**, when the implementer declares one — it proceeds without waiting; a
+  line from you stops it.
+
+You can hand any of those four back in a line. You cannot hand back the two gates.
 
 ## Where the method came from, and what I can and can't prove
 

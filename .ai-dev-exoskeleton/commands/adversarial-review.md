@@ -19,8 +19,8 @@ independence — Claude plans, a different model attacks; or vice versa.
 
 ## Quick Rules
 
-- The reviewer is READ-ONLY. It audits; it does not fix. No edits.
-- Rank findings by severity: CRITICAL > HIGH > MEDIUM > LOW.
+- The reviewer is READ-ONLY. It audits; it does not fix, so the findings stay honest.
+- Rank findings by severity: CRITICAL > WARNING > NOTE.
 - Every finding: the specific problem, why it matters, and a concrete recommendation.
 - Default to skepticism. If the reviewer is uncertain, it says "unverified" rather than
   waving the claim through.
@@ -31,10 +31,9 @@ independence — Claude plans, a different model attacks; or vice versa.
 1. **Give the reviewer the artifact and the context.** Paste or point to the plan/diff,
    plus what it's trying to achieve and any hard constraints. State explicitly:
    "Adversarial audit. Find what's wrong. Do not modify anything."
-2. **Ask for severity-ranked findings** in the format below.
-3. **Ask it to end with the 2–3 decisions worth reconsidering** before another line is
-   written — this forces prioritization over a flat list.
-4. **Reconcile.** Read the findings against the original. Accept what's real, reject what
+2. **Ask for severity-ranked findings** in the format below, ending with the 2–3 decisions
+   worth reconsidering before another line is written — that forces prioritization.
+3. **Reconcile.** Read the findings against the original. Accept what's real, reject what
    isn't (and note why). The point is a better artifact, not blind obedience to the critic.
 
 ## Output Format
@@ -45,7 +44,10 @@ independence — Claude plans, a different model attacks; or vice versa.
 ### CRITICAL
 - [problem] — why it matters — [concrete recommendation]
 
-### HIGH / MEDIUM / LOW
+### WARNING
+- ...
+
+### NOTE
 - ...
 
 ### Decisions to reconsider before proceeding
@@ -53,8 +55,4 @@ independence — Claude plans, a different model attacks; or vice versa.
 2. ...
 ```
 
-## Anti-Patterns
-
-- Do NOT run the review in the same session/model that produced the artifact.
-- Do NOT let the reviewer start fixing — audit only, so the findings stay honest.
-- Do NOT accept findings uncritically either — a wrong critic is still wrong; reconcile.
+If `docs/context/overrides/<this file's name>` exists, read it — where it conflicts with this file, it wins.

@@ -8,9 +8,6 @@ For the investigation methodology, follow the `../agents/debugger.md` agent's ru
 - NEVER modify or implement anything — diagnosis and proposals only
 - NEVER add try/catch, suppress errors, or apply quick patches
 - NEVER guess — trace the full call chain with evidence before concluding
-- State your hypothesis BEFORE looking at code
-- Trace the FULL call chain from entry point to the failure
-- Show data shapes at each step where relevant
 
 ## Done When
 1. Root cause(s) identified with evidence (file paths, line numbers, call chain trace)
@@ -43,3 +40,5 @@ For each root cause, present solutions as a table:
 
 ### Summary
 Brief summary of all findings and the recommended path forward.
+
+If `docs/context/overrides/<this file's name>` exists, read it — where it conflicts with this file, it wins.

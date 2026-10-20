@@ -5,18 +5,20 @@ LLM-agnostic set of plain-markdown agents, commands, and guides that live in
 `.ai-dev-exoskeleton/`. No runtime, no dependencies — the files are text a
 coding agent reads, and they happen to contain behavioral instructions.
 
-This is disciplined **agentic engineering**: constraint-driven, evidence-based, with a
-human as the decision-maker at the gates that matter. In practice that's two: **building
-the context** at the start, and **manually testing** the result at the end. The steps in
-between can run with the human checking output rather than supervising every move.
+This is disciplined **agentic engineering**: constraint-driven, evidence-based. Two points
+where your presence is mandatory — the work stops without you: **building the context** at
+the start, and **manually testing** the result at the end. Between them, an agent brings you
+four decisions you can hand back in a line: **the plan**, before implementation starts;
+**a root-cause analysis**, before any debugging fix is applied; **the review findings**
+the fix session left you; and **a new test seam**, when the implementer declares one — it
+proceeds without waiting; a line from you stops it.
 
 Every constraint here is a convention the agent is asked to follow, not a hard-enforced
 sandbox — the human stays responsible for holding the line.
 
-## The one rule
+## Prompt scaffold (optional)
 
-Every session declares these before work starts. They double as a scaffold for writing a
-focused prompt — fill them in and the prompt writes itself:
+Use it when a session keeps drifting; skip it if you already write tight prompts.
 
 ```
 MODE:       plan | implement | review | debug | explore
@@ -39,18 +41,22 @@ See the Laws in `.ai-dev-exoskeleton/guides/PLAYBOOK.md`.
   `build-context`, `start-debug`, `review-walkthrough`, `adversarial-review`.
   These are markdown you paste or reference; they are not native slash-commands
   unless you install them into your harness's command directory.
+- **References** — `.ai-dev-exoskeleton/references/` — opened by an agent only when a
+  condition matches: no lint or complexity gate recorded → `code-quality.md`; heavy task →
+  `heavy-mode.md`. Nobody reads them day to day.
 - **Guides (for the human)** — `.ai-dev-exoskeleton/guides/` — PLAYBOOK, workflows,
   checklists, and `field-notes.md` (a personal tool setup, not part of the method).
+- **Version** — `.ai-dev-exoskeleton/VERSION`, the release this copy came from.
 - **Project knowledge** — `docs/context/` — architecture, patterns, and traps for
-  THIS codebase. Start at the index `docs/context/README.md`. Generated during
-  onboarding; this is the per-project fill-in. By default agents read the context
-  the index points to; on large repos, scope down to what the mode needs.
-- **Task work** — `docs/tasks/[yyyymmdd-name]/` — CONTEXT.md, PLAN.md, REVIEW.md
+  THIS codebase, generated during onboarding. Start at the index `docs/context/README.md`;
+  on large repos, scope down to what the mode needs. A method rule that can't hold here is
+  adapted in `docs/context/overrides/` (PLAYBOOK, "Adapting a rule without forking").
+- **Task work** — `docs/tasks/[yyyymmdd-task-name]/` — CONTEXT.md, PLAN.md, REVIEW.md
   per feature. This is the session-recovery record.
 
 **Commit `docs/tasks/` or ignore it?** Either works; decide once, per repo. Committing
 gives the team a durable record of why each change was made and lets any session resume
-after a crash — at the cost of folders accumulating over time (archive or prune old ones
+after a crash — at the cost of folders accumulating over time (prune old ones
 periodically). Ignoring it keeps history clean but the recovery record is local to whoever
 ran the session. Teams doing review-heavy work usually commit it.
 
@@ -68,7 +74,7 @@ Some ground rules worth setting before you start:
 ## How work flows
 
 `build-context` (align on the feature) → `planner` (PLAN.md) → `implementer`
-(per phase, test-first) → `reviewer` (REVIEW.md) → fix cycle.
+(per phase, tested) → `reviewer` (REVIEW.md) → fix cycle → you test it yourself.
 
 New to this repo? Run onboarding first — see
 `.ai-dev-exoskeleton/guides/workflows/new-project-onboarding.md`.

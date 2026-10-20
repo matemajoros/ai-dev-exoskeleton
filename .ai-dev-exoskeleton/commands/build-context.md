@@ -3,9 +3,8 @@
 Lightweight Q&A routine to build mutual understanding of a feature before planning. No code, no planning — only context gathering and a final `CONTEXT.md` write.
 
 ## Quick Rules
-- NEVER implement code
-- NEVER write `PLAN.md` — that is the planner’s job, invoked manually afterwards
-- ONLY write a single markdown file: `docs/tasks/[yyyymmdd-short-description]/CONTEXT.md`
+- NEVER implement code or write `PLAN.md` — the planner is invoked manually afterwards
+- ONLY write a single markdown file: `docs/tasks/[yyyymmdd-task-name]/CONTEXT.md`
 - Goal: mutual alignment on requirements, constraints, scope, and exclusions
 
 ## Process
@@ -17,7 +16,7 @@ Tell the user:
 business requirements, technical constraints, UX decisions, what's in scope,
 what's out of scope. I'll respond OKE until you're done."
 ```
-Respond **OKE** to every user message until the user signals they are done (e.g., "that's it", "ready", "done with context", or asks you to proceed).
+Respond **OKE** to every user message until the user signals they are done (e.g., "that's it", "ready", "done with context", or asks you to proceed) — never skip this phase, even if the user seems eager to start.
 
 Why the bare acknowledgement: while the user is dumping context, any commentary,
 question, or suggestion from the agent interrupts their train of thought and drags the
@@ -33,6 +32,10 @@ Once the user is done, ask YOUR questions:
 
 The user answers. Keep asking follow-ups until you have no more questions.
 
+Ask rigor last, offering the index's **Default rigor**: *"Would you have asked another human
+to review this change?"* Yes means `heavy`, no means `light`. The user picks; you may argue
+for heavier, never for lighter.
+
 ### Phase C — Mutual confirmation
 When both sides have no more questions, confirm:
 ```
@@ -41,7 +44,7 @@ When both sides have no more questions, confirm:
 Do NOT proceed until the user confirms.
 
 ### Step 2 — Create task folder + CONTEXT.md
-Once the user confirms, create the task folder at `docs/tasks/[yyyymmdd-short-description]/` and write `CONTEXT.md`:
+Once the user confirms, create the task folder at `docs/tasks/[yyyymmdd-task-name]/` and write `CONTEXT.md`:
 
 ```markdown
 # [Feature Name] — Context
@@ -66,9 +69,10 @@ Once the user confirms, create the task folder at `docs/tasks/[yyyymmdd-short-de
 
 ## Exclusions
 - [what is NOT in scope]
-```
 
-This file preserves the Q&A knowledge so that a new session (e.g., the planner) can rebuild context from it without re-doing the Q&A.
+## Rigor
+light | heavy — [one-line reason]
+```
 
 ### Done
 After writing `CONTEXT.md`, stop and tell the user:
@@ -77,11 +81,6 @@ After writing `CONTEXT.md`, stop and tell the user:
 Next step: manually invoke the planner agent with a fresh session so it reads CONTEXT.md and produces PLAN.md."
 ```
 
-Do NOT invoke the planner yourself. Do NOT continue to implementation. This routine ends here.
+Do NOT invoke the planner or any other agent yourself. This routine ends here.
 
-## Anti-Patterns to Avoid
-- Do NOT skip Phase A (user context dump) — even if the user seems eager to start
-- Do NOT start asking questions before the user signals they are done
-- Do NOT write `CONTEXT.md` before mutual confirmation
-- Do NOT write `PLAN.md` or any code file
-- Do NOT invoke other agents (planner, implementer, etc.) — the user does that manually afterwards
+If `docs/context/overrides/<this file's name>` exists, read it — where it conflicts with this file, it wins.

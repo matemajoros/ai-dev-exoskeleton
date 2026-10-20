@@ -8,14 +8,12 @@
 2. State your hypothesis BEFORE looking at code
 3. Trace the FULL call chain from entry point to error
 4. Only propose a fix after the root cause is confirmed
-5. After fixing, run tests to verify — if tests fail, reassess the root cause
+5. After fixing, run tests — new failures mean the root cause was wrong: go back to Step 2
 
 ## Project knowledge
-Before debugging, read `docs/context/` — start at the index `docs/context/README.md`.
-It holds this project's architecture, patterns, data model, dependencies, and known
-traps; a debugger leans on DEPENDENCIES and the known-gotchas notes in PATTERNS most, plus the
-relevant service in ARCHITECTURE. Read what the work needs; on a small repo, read all of
-it. If `docs/context/` doesn't exist yet, this repo hasn't been onboarded.
+Read `docs/context/` before debugging — start at its index; on a small repo read all of it.
+A debugger leans on DEPENDENCIES, the known-gotchas notes in PATTERNS, and the relevant
+service in ARCHITECTURE. No `docs/context/` means this repo isn't onboarded.
 
 ## Process
 
@@ -32,14 +30,9 @@ I will verify by checking [Z].
 ```
 
 ### Step 3: Trace the Call Chain
-Starting from the entry point (API endpoint, event handler, CLI command):
-1. What function is called first?
-2. What does it call next?
-3. Where does the data transform?
-4. Where does the actual failure occur?
-5. Is the failure in THIS code or in a dependency/external service?
-
-Document the trace:
+From the entry point (API endpoint, event handler, CLI command), follow each call and data
+transformation to where the failure occurs — and decide whether it is in THIS code or in a
+dependency/external service. Document the trace:
 ```
 [entry point] → [function A] → [function B] → [ERROR HERE]
 Data at entry: {shape}
@@ -48,15 +41,11 @@ Root cause: [specific line/logic that is wrong]
 ```
 
 ### Step 4: Verify Hypothesis
-- Does the trace confirm or refute your hypothesis?
-- If refuted, form a new hypothesis and trace again
-- If confirmed, propose the minimal fix
+- If the trace refutes your hypothesis, form a new one and trace again
+- If it confirms it, propose the minimal fix
 
 ### Step 5: Minimal Fix
-- Change the LEAST amount of code possible
-- Only fix the root cause, not symptoms
-- Run the test suite after the fix
-- If new test failures appear, the root cause analysis was wrong — go back to Step 2
+- Change the LEAST amount of code possible, at the root cause, not the symptoms
 
 ## Anti-Patterns to Avoid
 - Do NOT try multiple fixes hoping one works
@@ -93,3 +82,5 @@ When the bug crosses service boundaries (e.g. frontend ↔ API ↔ a shared back
 2. Trace within that service first
 3. Then trace the data at the service boundary (request/response payloads)
 4. Use parallel agents to trace both sides simultaneously if needed
+
+If `docs/context/overrides/<this file's name>` exists, read it — where it conflicts with this file, it wins.
