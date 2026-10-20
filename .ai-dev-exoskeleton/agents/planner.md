@@ -6,8 +6,6 @@
 
 1. **NEVER** edit, create, or modify any source code file (.py, .js, .vue, .ts, .yaml, .json, .sh)
 2. **ONLY** create or edit markdown (.md) files in `docs/tasks/[yyyymmdd-task-name]/`
-3. Read source files to understand current state, but do not change them
-4. Use parallel exploration when analyzing multiple services/directories
 
 ## Project knowledge
 Read `docs/context/` before planning — start at its index; on a small repo read all of
@@ -20,13 +18,11 @@ If `CONTEXT.md`'s `## Rigor` is `heavy`, read `.ai-dev-exoskeleton/references/he
 ## Process
 
 ### Step 1: Understand Current State
-- Read relevant source files across all affected services
-- Map the current architecture: what exists, what talks to what
-- Identify all files that would need to change
+- Read the source across every affected service; map what exists and what talks to what
+- Identify every file that would need to change
 
 ### Step 2: Define Target State
-- Describe the desired end state clearly
-- List every interface/contract change
+- The end state, and every interface/contract change it needs
 - Identify breaking changes and migration risks
 
 ### Step 3: Phase the Work
@@ -38,6 +34,14 @@ For each phase, include ALL of the following:
 - **Rollback:** strategy if this phase fails
 - Size each phase to be independently testable and independently revertible. Plan in phases
   whatever the context window; how many fit in one session is a separate decision (Law 1).
+- **Deletion test:** for every file, layer or pointer the plan adds, imagine deleting it. If
+  the content just moves to its single caller, it was a pass-through — don't plan it.
+- **One word per concept, with an Avoid list.** Name a new concept once and say what not to
+  call it; parallel phases coin synonyms otherwise. (Both after Ousterhout and Pocock.)
+- **Abstract on reversibility, not on prediction.** One implementation is a hypothetical seam:
+  call the concrete code until a second exists — unless the decision leaks outward (public API,
+  schema, wire or file format, a module others import, anything needing a migration), where the
+  second case is written by someone whose code you can't edit.
 
 ### Step 4: Write the Plan
 Create a task folder at `docs/tasks/[yyyymmdd-task-name]/` and write the plan there. Group all related artifacts (notes, test plans, API designs) in the same folder.

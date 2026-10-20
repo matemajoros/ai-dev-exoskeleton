@@ -52,7 +52,18 @@ of the files every session loads.
   folder no command creates: history lives in git.
 - **The 0.1.0 entry's hours and session figures were removed.** They contradicted
   `README.md`, which is now the only place they are stated.
-- [B3: pending experiment]
+- **The planner gained two design principles, and only the two that earned it.** Three planner
+  runs on the same feature — two without a draft of borrowed principles, one with it — showed
+  that the deletion test and the one-word-per-concept rule change a plan, while
+  "one adapter is a hypothetical seam" changed nothing on prose work. Only the first two
+  shipped on that evidence, into `planner.md` Step 3. After Ousterhout and Pocock.
+- **When to abstract is answered by reversibility, not by prediction.** A third planner line,
+  and one reviewer line, come from practice rather than that test: one implementation is a
+  hypothetical seam, so call the concrete code until a second exists — unless the decision
+  leaks outward (public API, schema, wire or file format, a module others import, anything
+  needing a migration), where someone you can't edit writes the second case. The reviewer's
+  half is pointed the other way too: don't ask for generality without naming a second case
+  that exists today.
 
 **Migrating from 0.2.0.** Replace the folder; re-home anything you had edited inside the old one
 by PLAYBOOK's `## Adapting a rule without forking` table (`overrides/` is its rare row). Replace
@@ -63,7 +74,7 @@ sections. Re-run onboarding Session 3 (quality gates) and Session 4 (override pr
 and its DONE block `- Context:` lines.
 
 Payload: 23 files. Agents and commands: 668 lines, matching 0.2.0's 668. All of
-`.ai-dev-exoskeleton/`: 1,827 lines, up from 1,642 — the two `references/` files, onboarding's
+`.ai-dev-exoskeleton/`: 1,835 lines, up from 1,642 — the two `references/` files, onboarding's
 gates and override steps, and PLAYBOOK's two new sections.
 
 ## [0.2.0] — 2026-08-21 — honest claims, a worked example

@@ -35,15 +35,16 @@ If `CONTEXT.md`'s `## Rigor` is `heavy`, read `.ai-dev-exoskeleton/references/he
 
 ### Step 4: Check Pattern Consistency
 - Does this follow the existing architecture patterns?
-- Does it respect the project's layer boundaries and dependency direction as documented in
-  ARCHITECTURE.md? (e.g. in a hexagonal codebase: services depend on interfaces, not on
-  infrastructure — but use whatever rule that project actually states)
+- Does it respect the layer boundaries and dependency direction `ARCHITECTURE.md` documents?
+  (hexagonal, say: services depend on interfaces, not infrastructure — use the project's rule)
 - Is naming consistent with the rest of the codebase?
+- A new interface, port or wrapper with one implementation behind it? → NOTE. Don't ask for
+  generality without naming a second case that exists today: a reversible decision inside this
+  repo can wait, one that leaks outward can't.
 
 ### Step 5: Check Integration Points
-- If this changes an API contract, are all consumers updated?
-- If this changes a data model, are serialization/deserialization correct?
-- If this changes config, are all environments updated?
+- Changed contract → every consumer updated? Changed data model → serialization still
+  correct? Changed config → every environment covered?
 
 ### Step 6: Check Test Coverage
 - Is the new/changed behaviour tested, and do existing tests still pass?

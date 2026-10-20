@@ -57,9 +57,9 @@ CONTEXT.md → PLAN.md → (implementation, tracked by git) → REVIEW.md → fi
 ```
 
 `build-context` writes `docs/tasks/[yyyymmdd-task-name]/CONTEXT.md`, ending with
-`## Rigor` (build-context.md:37, build-context.md:77-78) → `planner` reads it and writes
+`## Rigor` (build-context.md:37, build-context.md:73-74) → `planner` reads it and writes
 `PLAN.md` in the same folder, phased, with Scope / Depends on / Verify / Rollback per phase;
-`light` allows a single phase (planner.md:17, planner.md:32-40, planner.md:50) →
+`light` allows a single phase (planner.md:15, planner.md:28-44, planner.md:54) →
 `implementer` executes one phase at a time inside that phase's SCOPE, declaring its `SEAM:`
 first (implementer.md:10, implementer.md:25-33); a heavy plan ends with a hardening phase it
 executes like any other (heavy-mode.md:10-14, feature.md:111-113) →

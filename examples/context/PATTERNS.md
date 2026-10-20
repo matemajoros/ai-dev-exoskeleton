@@ -13,9 +13,9 @@ type (explorer.md:22, explorer.md:28, explorer.md:33, explorer.md:39).
 
 After `## Process` the five files diverge into two shapes:
 
-- `planner`, `implementer`, `debugger` have `## Anti-Patterns to Avoid` (planner.md:94,
+- `planner`, `implementer`, `debugger` have `## Anti-Patterns to Avoid` (planner.md:98,
   implementer.md:93, debugger.md:50); their output template is a fenced block embedded inside
-  a Process step rather than its own section (planner.md:51-92, implementer.md:25-31,
+  a Process step rather than its own section (planner.md:55-96, implementer.md:25-31,
   debugger.md:36-41). `debugger` follows its Anti-Patterns with two situational sections
   (debugger.md:57, debugger.md:79).
 - `explorer` and `reviewer` instead have a dedicated `## Output Format` section holding the
@@ -25,7 +25,7 @@ After `## Process` the five files diverge into two shapes:
 
 Whatever the shape, all nine agent and command files end on the same line: "If
 `docs/context/overrides/<this file's name>` exists, read it — where it conflicts with this
-file, it wins." (planner.md:98, implementer.md:99, reviewer.md:111, explorer.md:66,
+file, it wins." (planner.md:102, implementer.md:99, reviewer.md:112, explorer.md:66,
 debugger.md:86, build-context.md:86, start-debug.md:44, review-walkthrough.md:15,
 adversarial-review.md:58). It is always the file's last line, set off by a blank line.
 
@@ -40,7 +40,7 @@ debugger.md:7). `implementer.md` is the exception — the one agent actually all
 source — so its Rules read `MUST` / `do not` instead (implementer.md:7-12).
 
 `Do NOT` (capitalized, not bolded) carries narrower guidance: the Anti-Patterns bullets
-(planner.md:95-96, implementer.md:94-97, debugger.md:51-55) and a command's hard stops
+(planner.md:99-100, implementer.md:94-97, debugger.md:51-55) and a command's hard stops
 (build-context.md:44, build-context.md:84). No command's "Quick Rules" section uses it;
 those are written as `NEVER` / `ONLY` (build-context.md:6-7, start-debug.md:8-10).
 
@@ -57,11 +57,11 @@ Cross-references in agent and command files are written from the repo root —
 ## Fenced output templates
 
 Any file that hands off a document a later session will read defines its exact shape as a
-fenced code block: `PLAN.md` (planner.md:51-92), `REVIEW.md` (reviewer.md:75-103),
+fenced code block: `PLAN.md` (planner.md:55-96), `REVIEW.md` (reviewer.md:75-103),
 `CONTEXT.md` (build-context.md:50-78), the implementer's DONE report
 (implementer.md:81-87), the debug root-cause trace (start-debug.md:23-27), the explorer's
 answer format (explorer.md:49-64), the adversarial review (adversarial-review.md:41-56).
-The override line always sits after the template, outside the fence (reviewer.md:111,
+The override line always sits after the template, outside the fence (reviewer.md:112,
 explorer.md:66, adversarial-review.md:58).
 
 ## The MODE / SCOPE / CONSTRAINT / DONE WHEN block
