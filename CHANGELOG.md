@@ -12,6 +12,19 @@ older). To upgrade, replace its `.ai-dev-exoskeleton/` folder with the new versi
 the repo's `AGENTS.md` pointer, and follow the migration note of every release in between.
 Your `docs/context/` (project knowledge) is untouched.
 
+## [0.4.0] — 2026-11-23 — a mechanical proof that the test checks the behaviour
+
+- **Heavy rigor gets a feature-flag red phase.** On a behaviour-changing task the
+  implementer adds a flag (default off), writes the test and sees it fail with the flag off,
+  switches the flag on, writes the code and sees it pass, then removes the flag and sees the
+  suite still pass. It is required when a flag fits the project; otherwise the report says
+  why not. Refactoring, configuration, documentation and no-behaviour tasks skip it. The
+  flag never ships.
+- **The reviewer checks the proof.** The flag-off red run and the flag-on green run go under
+  `### Evidence`; a missing, empty or unrelated proof is a WARNING, a leftover flag CRITICAL.
+- **Nothing else moves.** The protocol lives only in `references/heavy-mode.md`, so light
+  rigor, the three agent files and implementer rule 2 are unchanged. No new file.
+
 ## [0.3.0] — 2026-09-16 — rigor you choose, tests that prove something
 
 Rigor becomes a choice you make per task, and what an agent needs only sometimes moves out

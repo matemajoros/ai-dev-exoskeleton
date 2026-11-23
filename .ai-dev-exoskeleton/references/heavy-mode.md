@@ -25,6 +25,25 @@ A disclosed risk, not a prohibition: a hard threshold is an optimization target,
 cheapest way to lower a score is sometimes worse code — three badly named functions instead of
 one clear one. The net is still positive because a gamed metric shows in the diff.
 
+### Feature-flag red phase
+A mechanical proof that a test checks the new behaviour, not just that it passes. Under heavy
+it is **required for a behaviour-changing task** when a flag can be introduced sensibly in
+this project (a boolean, an environment variable, a config switch the code branches on). Skip
+it for refactoring, configuration, documentation, and anything with no behaviour change; if
+no flag fits, say why in the report. It meets rule 2 by a stronger route and does not replace
+it; the slices stay vertical, one test at a time.
+
+1. Add the flag, default **off**, guarding the new behaviour.
+2. Write the test. Run it with the flag off and watch it **fail** for the reason the
+   behaviour is missing (a missing import or a typo is not a red run).
+3. Switch the flag on and write the implementation. Run the test again and watch it pass.
+4. Remove the flag: the new behaviour is now unconditional. Run the full suite; it still
+   passes.
+
+The flag is temporary and never ships: step 4 is part of the phase, and no flag, branch or
+leftover reference remains in the diff. In the report, put the flag-off red run and the
+flag-on green run (command and output) next to the red-run line under `- Tests:`.
+
 ## Hardening pass
 A session believes its own tests, which is why this is the plan's own last phase, ideally in a
 fresh session: it checks whether the tests would notice a wrong behaviour. Add tests only —
@@ -42,6 +61,11 @@ of the intended behaviour — the tautological test again — and no tool detect
   in the pattern-consistency step. A violation is CRITICAL — it gets resolved (invert the
   dependency, insert an interface, split the module), not discussed.
 - Every gate's output goes into `### Evidence`.
+- **Feature-flag red phase** on a behaviour-changing task: check the report's flag-off red run
+  and flag-on green run — the red fails for the missing behaviour, the green is the same test —
+  and paste both under `### Evidence`. Check the diff for a leftover flag. A missing, empty or
+  unrelated proof, with no stated reason why no flag fit → WARNING; a flag left in the code →
+  CRITICAL, because it ships dead or dangerous code.
 - A rename or split made only to move a score, not to clarify the code → WARNING.
 - Heavy, but the plan's hardening phase is unticked or left no trace (no mutants, no
   broken-behaviour runs) → WARNING.
